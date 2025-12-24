@@ -1,0 +1,8 @@
+.env
+secrets/
+home/
+data/
+*.log
+.DS_Store
+.vscode/
+.idea/

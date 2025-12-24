@@ -1,0 +1,73 @@
+services:
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+    image: mariadb
+    restart: always
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - db_root_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - inception
+
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+    image: wordpress
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    secrets:
+      - db_password
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - inception
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx
+    image: nginx
+    restart: always
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - inception
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/trischma/data/mariadb
+
+  wp_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/trischma/data/wordpress
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+
+networks:
+  inception:
+    driver: bridge
