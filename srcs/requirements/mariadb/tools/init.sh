@@ -23,5 +23,4 @@ FLUSH PRIVILEGES;
 EOF
 	mysqladmin -u root -p${ROOT_PASS} shutdown
 fi
-
-exec su -s /bin/sh mysql -c "mysqld"
+exec mysqld --user=mysql
