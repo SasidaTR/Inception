@@ -2,7 +2,7 @@ services:
   mariadb:
     build:
       context: ./requirements/mariadb
-    image: mariadb
+    image: mariadb:inception
     restart: always
     env_file:
       - .env
@@ -17,7 +17,7 @@ services:
   wordpress:
     build:
       context: ./requirements/wordpress
-    image: wordpress
+    image: wordpress:inception
     restart: always
     env_file:
       - .env
@@ -34,7 +34,7 @@ services:
   nginx:
     build:
       context: ./requirements/nginx
-    image: nginx
+    image: nginx:inception
     restart: always
     env_file:
       - .env
